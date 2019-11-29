@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+      docker:
+        - image: circleci/python:3.6.2-stretch-browsers
+      steps:
+        - checkout
+        - run: mkdir test-reports
+        - run:
+            name: Install Python Dependencies
+            command: |
+              python3 -m venv venv
+              . venv/bin/activate
+              pip install -r ./.circleci/requirements.txt
+        - save_cache:
+            paths:
+              - ./venv
+            key: v1-dependencies-{{ checksum "./.circleci/requirements.txt" }}
+        
+        - run:
+            name: run test case about loading of articles and search function
+            command: |
+              . venv/bin/activate
+              robot -d report-of-articles_loading_function Tests/articles_loading.robot
+        - store_artifacts:
+            path: report-of-articles_loading_function/
+            destination: report-of-articles_loading_function
+        - store_test_results:
+            path: report-of-articles_loading_function
