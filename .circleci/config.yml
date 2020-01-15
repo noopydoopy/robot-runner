@@ -16,7 +16,7 @@ jobs:
             paths:
               - ./venv
             key: v1-dependencies-{{ checksum "./.circleci/requirements.txt" }}
-        
+
         - run:
             name: run test case about loading of articles and search function
             command: |
@@ -27,3 +27,9 @@ jobs:
             destination: report-of-articles_loading_function
         - store_test_results:
             path: report-of-articles_loading_function
+        - build-test-result:
+            name: generate payload to send notification
+            command: |
+              sudo apt-get install libxml2-utils
+              sh ./sh/generatereport.sh
+
