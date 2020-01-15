@@ -30,7 +30,6 @@ jobs:
         - run:
             name: generate payload to send notification
             command: |
-              sudo find / -name xmllint
               apt-get install libxml2-utils
               bash ./sh/generatereport.sh
 
