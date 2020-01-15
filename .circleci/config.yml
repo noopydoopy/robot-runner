@@ -3,8 +3,14 @@ jobs:
   build:
       docker:
         - image: circleci/python:3.6.2-stretch-browsers
+        - image: koalaman/shellcheck-alpine:stable
       steps:
         - checkout
+        - run:
+            name: Check Scripts
+            command:  |
+              find . -type f -name '*.sh' | wc -l
+              find . -type f -name '*.sh' | xargs shellcheck --external-sources
         - run: mkdir test-reports
         - run:
             name: Install Python Dependencies
@@ -30,6 +36,6 @@ jobs:
         - run:
             name: generate payload to send notification
             command: |
-              apt-get install libxml2-utils
+              sudo apt-get install libxml2-utils
               bash ./sh/generatereport.sh
 
